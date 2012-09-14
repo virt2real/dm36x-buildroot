@@ -1,0 +1,6 @@
+config BR2_PACKAGE_DUMPDM365
+	bool "dumpdm365"
+	help
+	  Utility for dumping DM365 registers
+
+	  https://github.com/fhunleth/dumpdm365

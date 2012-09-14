@@ -1,0 +1,5 @@
+config BR2_TARGET_UBL
+	bool "ubl"
+	help
+	  Build the UBL bootloader
+

@@ -1,0 +1,4 @@
+config BR2_PACKAGE_HOST_DM36X_PACKAGER
+	bool "host dm36x-packager"
+	help
+	  Packager utility for creating SD Card images for the DM36x
