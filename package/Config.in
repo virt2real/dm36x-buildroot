@@ -5,6 +5,7 @@ source "package/customize/Config.in"
 
 menu "TI DM36x components"
 source "package/ti-codec-engine/Config.in"
+source "package/ti-dm365-codecs-aaclcenc/Config.in"
 source "package/ti-dm365-codecs-h264enc/Config.in"
 source "package/ti-dm365-codecs-mpeg4enc/Config.in"
 source "package/ti-dm365mmap/Config.in"
