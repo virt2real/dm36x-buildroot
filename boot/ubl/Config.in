@@ -3,3 +3,10 @@ config BR2_TARGET_UBL
 	help
 	  Build the UBL bootloader
 
+if BR2_TARGET_UBL
+config BR2_TARGET_UBL_CONFIGNAME
+	string "UBL configuration name"
+	help
+	  Specify the UBL configuration to be built.
+
+endif # BR2_TARGET_UBL
