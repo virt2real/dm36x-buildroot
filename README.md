@@ -8,7 +8,7 @@ boards using Buildroot.
 Buildroot requires several packages to be installed on the system before it
 can work. On Ubuntu, the following apt-get line is sufficient:
 
-    sudo apt-get install git-core bison flex g++ gettext texinfo libncurses5-dev pv libssl-dev lzop
+    sudo apt-get install git-core bison flex g++ gettext texinfo libncurses5-dev pv libssl-dev lzop gawk
 
 ## Building
 
