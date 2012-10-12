@@ -3,7 +3,7 @@
 # UBL
 #
 #############################################################
-UBL_VERSION = a900d47
+UBL_VERSION = cf5d4f1
 UBL_SITE = git@bitbucket.org:fhunleth/dm36x-flash-utils.git
 UBL_SITE_METHOD = git
 
