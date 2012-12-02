@@ -16,8 +16,12 @@ unset QMAKESPEC
 make $DEFCONFIG
 make
 
+HOST_DIR=`pwd`/output/host
+
+# Create .fw file
+echo Building firmware file...
 UBLNAME=`grep UBL_CONFIGNAME .config | awk -F\" '{print $(NF-1)}'`
-output/host/usr/bin/dm36x-packager -v $VERSION output/images/ubl_DM36x_$UBLNAME.bin output/images/u-boot.bin output/images/rootfs.ext2 $FW_FILENAME
+$HOST_DIR/usr/bin/dm36xpackager.py -v $VERSION -s output/images/ubl_DM36x_$UBLNAME.bin -u output/images/u-boot.bin -r output/images/rootfs.ext2 -f $FW_FILENAME -c board/leopardboard/dm368/sdcard-map.cfg
 
 echo ------------------------------
 echo Built $FW_FILENAME

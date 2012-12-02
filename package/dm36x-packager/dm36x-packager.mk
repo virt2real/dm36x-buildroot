@@ -3,8 +3,12 @@
 # dm36x-packager
 #
 #############################################################
-DM36X_PACKAGER_VERSION = cdd5415
-DM36X_PACKAGER_SITE = git@bitbucket.org:fhunleth/dm36x-packager.git
-DM36X_PACKAGER_SITE_METHOD = git
+DM36X_PACKAGER_VERSION = edc59f1
+DM36X_PACKAGER_SITE = http://github.com/fhunleth/dm36x-packager/tarball/master
 
-$(eval $(host-autotools-package))
+define HOST_DM36X_PACKAGER_INSTALL_CMDS
+	$(INSTALL) -m 0755 -D $(@D)/dm36xpackager.py \
+		$(HOST_DIR)/usr/bin/dm36xpackager.py
+endef
+
+$(eval $(host-generic-package))
