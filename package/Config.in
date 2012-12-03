@@ -3,6 +3,11 @@ menu "Package Selection for the target"
 source "package/busybox/Config.in"
 source "package/customize/Config.in"
 
+menu "MeteorCam components"
+source "package/meteorcam-web/Config.in"
+source "package/v4l2test/Config.in"
+endmenu
+
 menu "TI DM36x components"
 source "package/ti-codec-engine/Config.in"
 source "package/ti-dm365-codecs-aaclcenc/Config.in"
@@ -153,7 +158,9 @@ source "package/qt/Config.in"
 if BR2_PACKAGE_QT
 comment "QT libraries and helper libraries"
 source "package/grantlee/Config.in"
+source "package/libqxt/Config.in"
 source "package/qextserialport/Config.in"
+source "package/qt-mobility/Config.in"
 source "package/qtuio/Config.in"
 endif
 
