@@ -1,0 +1,11 @@
+config BR2_PACKAGE_V4L2TEST
+	depends on BR2_LINUX_KERNEL
+	select BR2_PACKAGE_QT
+	select BR2_PACKAGE_LIBQXT
+	select BR2_PACKAGE_TI_FRAMEWORK_COMPONENTS
+	select BR2_PACKAGE_TI_CODEC_ENGINE
+	select BR2_PACKAGE_TI_XDCTOOLS
+	select BR2_PACKAGE_TI_DM365_CODECS_H264ENC
+	bool "V4L2Test Application"
+	help
+	  Build the v4l2test application

@@ -1,0 +1,6 @@
+config BR2_PACKAGE_METEORCAM_WEB
+	bool "meteorcam-web"
+	select BR2_PACKAGE_LIGHTTPD
+	help
+	  This project contains the web interface for
+	  the MeteorCam.
