@@ -1,0 +1,25 @@
+From f77dc80ffccbb287926ccbfb3dc04d872ebabea6 Mon Sep 17 00:00:00 2001
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Mon, 25 Jun 2012 18:47:39 -0400
+Subject: [PATCH] Add support for url parts with hyphens
+
+---
+ src/web/qxtwebslotservice.cpp |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/src/web/qxtwebslotservice.cpp b/src/web/qxtwebslotservice.cpp
+index 0ae2bd9..d4de0ae 100644
+--- a/src/web/qxtwebslotservice.cpp
++++ b/src/web/qxtwebslotservice.cpp
+@@ -101,7 +101,7 @@ void QxtWebSlotService::pageRequestedEvent(QxtWebRequestEvent* event)
+     QByteArray action = "index";
+     if (args.count())
+     {
+-        action = args.at(0).toUtf8();
++        action = args.at(0).toUtf8().replace('-', '_');
+         if (action.trimmed().isEmpty())
+             action = "index";
+         args.removeFirst();
+-- 
+1.7.0.4
+

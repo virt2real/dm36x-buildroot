@@ -1,0 +1,73 @@
+config BR2_PACKAGE_LIBQXT
+	depends on BR2_PACKAGE_QT
+	bool "libqxt"
+	help
+	  Qxt is an extension library for Qt providing a suite of
+	  cross-platform utility classes to add functionality not
+	  readily available in the Qt toolkit by Qt Development
+	  Frameworks, Nokia.
+
+if BR2_PACKAGE_LIBQXT
+
+choice
+        prompt "Library type"
+        help
+          Selects the library type: Shared or Static
+
+config BR2_PACKAGE_LIBQXT_SHARED
+        bool "Shared library"
+        depends on !BR2_PREFER_STATIC_LIB
+        help
+          Create and use shared Qt libraries.
+          If you have multiple programs that depend on Qxt, say Y.
+
+config BR2_PACKAGE_LIBQXT_STATIC
+        bool "Static Library"
+        help
+          Create and use static Qxt libraries.
+          If you don't have multiple programs on the target that depends on
+          Qxt, then this will save you quite some of storage space.
+          If unsure, say Y.
+
+endchoice
+
+config BR2_PACKAGE_LIBQXT_BERKELEYDB_MODULE
+	bool "BerkeleyDB Module"
+	depends on BR2_PACKAGE_BERKELEYDB
+	help
+	  Compile in the BerkeleyBD module.
+
+config BR2_PACKAGE_LIBQXT_GUI_MODULE
+        bool "Gui Module"
+	depends on BR2_PACKAGE_QT_GUI_MODULE
+        default y
+        help
+          Compiles in the Qxt widgets.
+
+config BR2_PACKAGE_LIBQXT_NETWORK_MODULE
+	bool "Network Module"
+	depends on BR2_PACKAGE_QT_NETWORK
+	default y
+	help
+	  Compile in the Qxt networking extensions.
+
+config BR2_PACKAGE_LIBQXT_SQL_MODULE
+	bool "SQL Module"
+	depends on BR2_PACKAGE_SQLITE
+	default y
+	help
+	  Compile in the Qxt Sqlite module.
+
+config BR2_PACKAGE_LIBQXT_WEB_MODULE
+	bool "Web Module"
+	select BR2_PACKAGE_LIBQXT_NETWORK_MODULE
+	help
+	  Compile in the Qxt web module.
+
+config BR2_PACKAGE_LIBQXT_ZEROCONF_MODULE
+	bool "Zeroconf Module"
+	select BR2_PACKAGE_LIBQXT_NETWORK_MODULE
+	help
+	  Compile in the Qxt zeroconf module.
+
+endif

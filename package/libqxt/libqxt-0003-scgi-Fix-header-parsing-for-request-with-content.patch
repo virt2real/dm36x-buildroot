@@ -1,0 +1,36 @@
+From b627bc9736569fd65e9c7ac59891fd5c8d89e413 Mon Sep 17 00:00:00 2001
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Sat, 14 Jul 2012 20:12:34 -0400
+Subject: [PATCH] scgi: Fix header parsing for request with content
+
+---
+ src/web/qxtscgiserverconnector.cpp |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/web/qxtscgiserverconnector.cpp b/src/web/qxtscgiserverconnector.cpp
+index 3297b94..aa2983e 100644
+--- a/src/web/qxtscgiserverconnector.cpp
++++ b/src/web/qxtscgiserverconnector.cpp
+@@ -162,15 +162,15 @@ QHttpRequestHeader QxtScgiServerConnector::parseRequest(QByteArray& buffer)
+     {
+         if (key.startsWith(QString("http_")))
+         {
+-            request_m.setValue(key.right(key.size() - 5), request_m.value(key));
++            QString realKey = key.right(key.size() - 5).replace(QLatin1Char('_'), QLatin1Char('-'));
++            request_m.setValue(realKey, request_m.value(key));
++            request_m.removeValue(key);
+         }
+     }
+ 
+     request_m.setValue("Connection", "close");
+ 
+-
+-    buffer.chop(1);
+-
++    buffer = buffer.mid(1);
+ 
+     return request_m;
+ }
+-- 
+1.7.0.4
+

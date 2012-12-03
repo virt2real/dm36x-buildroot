@@ -1,0 +1,42 @@
+From a599b277f933fb4657af84c5e876777a1b69f580 Mon Sep 17 00:00:00 2001
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Sat, 7 Jul 2012 19:31:50 -0400
+Subject: [PATCH] qxtabstracthttpconnector: fix readyRead() race condition
+
+Fix race condition where the QxtAbstractHttpConnector and
+QxtWebContent were both handling reads on the same
+connection. The desire was for QxtWebContent to read
+everything, but QxtAbstractHttpConnector was stealing the
+bytes.
+---
+ src/web/qxtabstracthttpconnector.cpp |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
+
+diff --git a/src/web/qxtabstracthttpconnector.cpp b/src/web/qxtabstracthttpconnector.cpp
+index 9387d9c..d1c021e 100644
+--- a/src/web/qxtabstracthttpconnector.cpp
++++ b/src/web/qxtabstracthttpconnector.cpp
+@@ -174,12 +174,20 @@ void QxtAbstractHttpConnector::incomingData(QIODevice* device)
+         start = buffer.left(header.value("content-length").toInt());
+         buffer = buffer.mid(header.value("content-length").toInt());
+         content = new QxtWebContent(header.contentLength(), start, device);
++
++        // Disconnect the readyRead() signal since QxtWebContent will be handling
++        // the reads from this point forward.
++        QObject::disconnect(device, SIGNAL(readyRead()), this, SLOT(incomingData()));
+     }
+     else if (header.hasKey("connection") && header.value("connection").toLower() == "close")
+     {
+         start = buffer;
+         buffer.clear();
+         content = new QxtWebContent(header.contentLength(), start, device);
++
++        // Disconnect the readyRead() signal since QxtWebContent will be handling
++        // the reads from this point forward.
++        QObject::disconnect(device, SIGNAL(readyRead()), this, SLOT(incomingData()));
+     } // else no content
+     quint32 requestID = qxt_d().getNextRequestID(device);
+     sessionManager()->incomingRequest(requestID, header, content);
+-- 
+1.7.0.4
+
