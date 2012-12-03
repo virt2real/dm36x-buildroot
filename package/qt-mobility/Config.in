@@ -1,0 +1,93 @@
+menuconfig BR2_PACKAGE_QT_MOBILITY
+	bool "qt-mobility"
+	depends on BR2_PACKAGE_QT
+	help
+	  Qt Mobility enables Qt developers to include standard mobile
+	  functionality in their applications.
+
+	  http://qt.gitorious.org/qt-mobility
+
+if BR2_PACKAGE_QT_MOBILITY
+
+config BR2_PACKAGE_QT_MOBILITY_DEBUG
+	bool "Compile with debug support"
+	help
+	  If unsure, say N.
+
+config BR2_PACKAGE_QT_MOBILITY_DEMOS
+	bool "Compile and install demos and examples (with code)"
+	select BR2_PACKAGE_QT_GUI_MODULE
+	help
+	  If unsure, say N.
+
+config BR2_PACKAGE_QT_MOBILITY_BEARER
+	bool "Bearer Module"
+	help
+	  Build the Qt Mobility Bearer module.
+
+config BR2_PACKAGE_QT_MOBILITY_CONTACTS
+	bool "Contacts Module"
+	help
+	  Build the Qt Mobility Contacts module.
+
+config BR2_PACKAGE_QT_MOBILITY_GALLERY
+	bool "Gallery Module"
+	help
+	  Build the Qt Mobility Gallery module.
+
+config BR2_PACKAGE_QT_MOBILITY_LOCATION
+	bool "Location Module"
+	help
+	  Build the Qt Mobility Location module.
+
+config BR2_PACKAGE_QT_MOBILITY_PUBLISHSUBSCRIBE
+	bool "Publish Subscribe Module"
+	help
+	  Build the Qt Mobility Publish Subscribe module.
+
+config BR2_PACKAGE_QT_MOBILITY_MESSAGING
+	bool "Messaging Module"
+	help
+	  Build the Qt Mobility Messaging module.
+
+config BR2_PACKAGE_QT_MOBILITY_MULTIMEDIA
+	bool "Multimedia Module"
+	help
+	  Build the Qt Mobility Multimedia module.
+
+config BR2_PACKAGE_QT_MOBILITY_SYSTEMINFO
+	bool "Systeminfo Module"
+	help
+	  Build the Qt Mobility Systeminfo module.
+
+config BR2_PACKAGE_QT_MOBILITY_SERVICEFRAMEWORK
+	bool "Service Framework Module"
+	help
+	  Build the Qt Mobility Service Framework module.
+
+config BR2_PACKAGE_QT_MOBILITY_SENSORS
+	bool "Sensors Module"
+	help
+	  Build the Qt Mobility Sensors module.
+
+config BR2_PACKAGE_QT_MOBILITY_VERSIT
+	bool "Versit Module"
+	help
+	  Build the Qt Mobility Versit module.
+
+config BR2_PACKAGE_QT_MOBILITY_ORGANIZER
+	bool "Organizer Module"
+	help
+	  Build the Qt Mobility Organizer module.
+
+config BR2_PACKAGE_QT_MOBILITY_FEEDBACK
+	bool "Feedback Module"
+	help
+	  Build the Qt Mobility Feedback module.
+
+config BR2_PACKAGE_QT_MOBILITY_CONNECTIVITY
+	bool "Connectivity Module"
+	help
+	  Build the Qt Mobility Connectivity module.
+
+endif # BR2_PACKAGE_QT_MOBILITY
