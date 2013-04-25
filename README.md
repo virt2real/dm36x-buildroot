@@ -10,11 +10,26 @@ can work. On Ubuntu, the following apt-get line is sufficient:
 
     sudo apt-get install git-core bison flex g++ gettext texinfo libncurses5-dev pv libssl-dev lzop gawk
 
-## Building
+## Building for Virt2Real v.1 mass board
+
+First of all set default board configuration:
+
+    make virt2real_v1_mass_defconfig
+
+Now you can change some options and build the world by using:
+
+    make menuconfig
+    make
+    make linux-menuconfig // for kernel configuration issues
+    make
+
+Now you get uImage and FS image in output/images.
+
+## Building for Leopard Board
 
 To build a firmware image, run:
 
-    ./build.sh
+    ./board/leopardboard/build.sh
 
 This will result in a .fw file being built. This takes a while.
 
