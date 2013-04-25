@@ -645,7 +645,7 @@ BR2_PACKAGE_I2C_TOOLS=y
 #
 # Interpreter languages and scripting
 #
-BR2_PACKAGE_ERLANG=y
+# BR2_PACKAGE_ERLANG is not set
 # BR2_PACKAGE_ERLANG_MEGACO is not set
 # BR2_PACKAGE_HASERL is not set
 # BR2_PACKAGE_LUA is not set
