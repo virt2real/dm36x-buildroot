@@ -4,7 +4,7 @@
 #
 #############################################################
 UBL_VERSION = cf5d4f1
-UBL_SITE = git@bitbucket.org:fhunleth/dm36x-flash-utils.git
+UBL_SITE = git://github.com/virt2real/dm36x-flash-utils.git
 UBL_SITE_METHOD = git
 
 UBL_INSTALL_IMAGES = YES
