@@ -14,7 +14,7 @@ ERLANG_LICENSE = EPL
 ERLANG_LICENSE_FILES = EPLICENCE
 
 # The configure checks for these functions fail incorrectly
-ERLANG_CONF_ENV = ac_cv_func_isnan=yes ac_cv_func_isinf=yes
+ERLANG_CONF_ENV = ac_cv_func_isnan=yes ac_cv_func_isinf=yes erl_xcomp_sysroot=$(STAGING_DIR)
 
 ERLANG_CONF_OPT = --without-javac
 HOST_ERLANG_CONF_OPT = --without-javac
@@ -26,17 +26,10 @@ else
 ERLANG_CONF_OPT += --without-termcap
 endif
 
-ifeq ($(BR2_PACKAGE_OPENSSL),y)
 ERLANG_CONF_OPT += --with-ssl
 ERLANG_DEPENDENCIES += openssl
-else
-ERLANG_CONF_OPT += --without-ssl
-endif
-
-ifeq ($(BR2_PACKAGE_ZLIB),y)
 ERLANG_CONF_OPT += --enable-shared-zlib
 ERLANG_DEPENDENCIES += zlib
-endif
 
 # Remove source, example, gs and wx files from the target
 ERLANG_REMOVE_PACKAGES = gs wx
