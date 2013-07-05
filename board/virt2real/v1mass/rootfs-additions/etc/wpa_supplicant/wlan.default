@@ -1,0 +1,23 @@
+ctrl_interface=/var/run/wpa_supplicant
+ctrl_interface_group=root
+#fast_reauth=1
+#ap_scan=1
+network={
+    ssid="network1"
+    key_mgmt=WPA-PSK
+    group=TKIP CCMP
+    pairwise=TKIP CCMP
+    proto=WPA WPA2
+    psk="password"
+    priority=18
+}
+
+network={
+    ssid="network2"
+    key_mgmt=WPA-PSK
+    group=TKIP CCMP
+    pairwise=TKIP CCMP
+    proto=WPA WPA2
+    psk="password"
+    priority=17
+}

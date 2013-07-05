@@ -80,7 +80,7 @@ stop)
 	;;
 
 *)
-	echo "Usage: /etc/init.d/coprocessors {start|stop}"
+	echo "Usage: /etc/init.d/S30modules {start|stop}"
 	exit 1
 	;;
 esac

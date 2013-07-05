@@ -1,0 +1,8 @@
+#!/bin/sh
+
+@echo "Running autostart script..."
+@/etc/virt2real/setlight.sh white
+
+@sh /etc/virt2real/autostart.sh
+
+@echo "Done"
