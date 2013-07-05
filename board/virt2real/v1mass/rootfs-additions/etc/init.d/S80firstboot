@@ -11,30 +11,30 @@ if [ -e /etc/1stboot ];
 then
         echo "First time boot detected"
 
-        grep mmcblk0p3 /proc/mounts >/dev/null
-        if [ "$?" != "0" ];
-        then
-                echo "Performing first time format of /mnt (/dev/mmcblk0p3)"
-                mke2fs -t ext4 -L data /dev/mmcblk0p3
+        #grep mmcblk0p3 /proc/mounts >/dev/null
+        #if [ "$?" != "0" ];
+        #then
+        #        echo "Performing first time format of /mnt (/dev/mmcblk0p3)"
+        #        mke2fs -t ext4 -L data /dev/mmcblk0p3
 
-                # Mount our newly formatted user partition 
-                mount /mnt
-        fi
+        #        # Mount our newly formatted user partition 
+        #        mount /mnt
+        #fi
 
-        grep mmcblk0p4 /proc/mounts >/dev/null
-        if [ "$?" != "0" ];
-        then
-                echo "Performing first time format of /root (/dev/mmcblk0p4)"
-                mke2fs -t ext4 -L home /dev/mmcblk0p4
+        #grep mmcblk0p4 /proc/mounts >/dev/null
+        #if [ "$?" != "0" ];
+        #then
+        #        echo "Performing first time format of /root (/dev/mmcblk0p4)"
+        #        mke2fs -t ext4 -L home /dev/mmcblk0p4
 
-                # Mount our newly formatted user partition 
-                mount /root
-        fi
+        #        # Mount our newly formatted user partition 
+        #        mount /root
+        #fi
 
         echo "Clearing first time boot flag"
-        mount -o remount,rw /
+        #mount -o remount,rw /
         rm /etc/1stboot
-        mount -o remount,ro /
+        #mount -o remount,ro /
 fi
 
 

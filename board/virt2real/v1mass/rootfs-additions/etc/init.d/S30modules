@@ -1,51 +1,86 @@
-#!/bin/sh
-# 
-# Default DM365 Memory Map 128 MB
-#
-# Start Addr    Size    Description
-# ----------------------------------------------------------------
-# 0x00001000    32K     ARM926 TCM memory used by platinum codec
-# 0x80000000    48 MB   Linux
-# 0x83000000    12 MB   Video driver memory (Linux)
-# 0x83C00000    68 MB   CMEM
-# 0x88000000    BOTTOM  ADDRESS
-#
+#!/bin/sh -e
 
 case "$1" in
-    start|"")
-	rmmod cmemk 2>/dev/null
-
-	# Pools configuration
-	modprobe cmemk phys_start=0x83C00000 phys_end=0x88000000 pools=1x16539648,1x4841472,4x1843200,14x1646592,1x282624,1x176128,1x147456,1x69632,1x61440,1x32768,2x20480,1x16384,1x12288,4x8192,69x4096 allowOverlap=1 phys_start_1=0x00001000 phys_end_1=0x00008000 pools_1=1x28672 
-
-	# Decode + Display
-	#modprobe cmemk phys_start=0x83c00000 phys_end=0x88000000 pools=1x16539648,1x4841472,14x1646592,1x282624,1x176128,1x147456,1x69632,1x61440,1x32768,2x20480,1x12288,1x8192,64x4096
-
-	# Capture + Encode
-	#modprobe cmemk phys_start=0x83c00000 phys_end=0x88000000 pools=1x3112960,1x2764800,3x1536000,1x65536,1x61440,1x49152,1x20480,1x16384,2x8192,87x4096
-
-	# Resizer
-	#modprobe cmemk phys_start=0x83c00000 phys_end=0x88000000 pools=3x1843200
-
-	# Non-accel display
-	#modprobe cmemk phys_start=0x83c00000 phys_end=0x88000000 pools=1x1843200
-
-	modprobe irqk
-	modprobe edmak
-	#modprobe dm365mmap
-
-	#rm -f /dev/dm365mmap
-	#mknod /dev/dm365mmap c `awk "\\$2==\"dm365mmap\" {print \\$1}" /proc/devices` 0
+start)
+	echo "Loading coprocessors modules..."
+	if [ -f /lib/modules/3.9.0-rc6-virt2real+/kernel/drivers/dsp/cmemk.ko ] ; then
+	    PHYS_START=
+	    if [ -z "$PHYS_START" ] ; then
+	        RESERVED_START=$(( `sed -e "s/.*mem=\([0-9]*\)M .*/\1 * 1024 * 1024/" /proc/cmdline` ))
+	        # Some platforms like DM365 setup reserved video capture and display buffers on the reserver memory area
+	        # so we are careful to avoid overlaping these areas with cmem
+	        VIDEO_DISPLAY_BUFFERS_SIZE=$(( `( grep -q y.cont2 /proc/cmdline && sed -e "s/.*y.cont2_bufsize=\([0-9]*\) .*/+ \1/" /proc/cmdline ) || echo 0` ))
+	        VIDEO_CAPTURE_BUFFERS_SIZE=$(( `( grep -q re.cont /proc/cmdline && sed -e 's/.*e.cont_bufsize=\([0-9]*\) .*/+ \1/' /proc/cmdline ) || echo 0` ))
+	        PHYS_START=`printf '0x%x' $(( 0x80000000 + $RESERVED_START + $VIDEO_DISPLAY_BUFFERS_SIZE + $VIDEO_CAPTURE_BUFFERS_SIZE ))`
+	    fi
+	    PHYS_END=`printf '0x%x' $(($PHYS_START + 0xF00000))`
+	    PHYS_END_INT=`printf '%d' $(($PHYS_START + 0xF00000))`
+	    if [ $PHYS_END_INT -gt 2281701376 ] ; then
+		echo "WARNING: the cmem allocation ends beyond the end of RAM registered for this hardware"
+		echo "End of cmem: $PHYS_END, End of ram: 0x88000000 \n"
+	    fi
+	    rmmod cmemk 2>/dev/null || true
+	    rm -f /dev/cmem
+	    echo "  Loading cmem from $PHYS_START to $PHYS_END"
+	    modprobe cmemk phys_start=$PHYS_START phys_end=$PHYS_END allowOverlap=1 useHeapIfPoolUnavailable=1 allowOverlap=1 phys_start_1=0x00001000 phys_end_1=0x00008000 pools_1=1x28672
+	fi
+	if [ -f /lib/modules/3.9.0-rc6-virt2real+/kernel/drivers/dsp/dsplinkk.ko ] ; then
+	    rmmod dsplinkk 2>/dev/null || true
+	    modprobe dsplinkk
+	fi
+	if [ -f /lib/modules/3.9.0-rc6-virt2real+/kernel/drivers/dsp/sdmak.ko ] ; then
+	    rmmod sdmak 2>/dev/null || true
+	    modprobe sdmak
+	fi
+	if [ -f /lib/modules/3.9.0-rc6-virt2real+/kernel/drivers/dsp/lpm_omap3530.ko ] ; then
+	    rmmod lpm_omap3530 2>/dev/null || true
+	    modprobe lpm_omap3530
+	fi
+	if [ -f /lib/modules/3.9.0-rc6-virt2real+/kernel/drivers/dsp/dm365mmap.ko ] ; then
+	    rmmod dm365mmap 2>/dev/null || true
+	    modprobe dm365mmap
+	    # For some reason this driver doesn't triger udev/mdev to build the device
+	    rm -f /dev/dm365mmap
+	    mknod /dev/dm365mmap c `awk '$2  ~ /dm365mmap/ {print $1}' /proc/devices` 0
+	fi
+	if [ -f /lib/modules/3.9.0-rc6-virt2real+/kernel/drivers/dsp/edmak.ko ] ; then
+	    rmmod edmak 2>/dev/null || true
+	    modprobe edmak
+	fi
+	if [ -f /lib/modules/3.9.0-rc6-virt2real+/kernel/drivers/dsp/irqk.ko ] ; then
+	    rmmod irqk 2>/dev/null || true
+	    modprobe irqk
+	fi
+	
 	;;
-    stop)
-	rmmod cmemk
-	rmmod irqk
-	rmmod edmak
-	#rmmod dm365mmap
-	#rm -f /dev/dm365mmap
+
+stop)
+	echo "Unloading coprocessors modules"
+	if lsmod | grep -q cmemk ; then
+	    rmmod cmemk || true
+	fi
+	if lsmod | grep -q sdmak ; then
+	    rmmod sdmak || true
+	fi
+	if lsmod | grep -q lpm_omap3530 ; then
+	    rmmod lpm_omap3530 || true
+	fi
+	if lsmod | grep -q dsplinkk ; then
+	    rmmod dsplinkk || true
+	fi
+	if lsmod | grep -q dm365mmap ; then
+	    rmmod dm365mmap || true
+	fi
+	if lsmod | grep -q edmak ; then
+	    rmmod edmak || true
+	fi
+	if lsmod | grep -q irqk ; then
+	    rmmod irqk || true
+	fi
 	;;
-    *)
-	echo "Usage: $0 {start|stop}" >&2
+
+*)
+	echo "Usage: /etc/init.d/coprocessors {start|stop}"
 	exit 1
 	;;
 esac
