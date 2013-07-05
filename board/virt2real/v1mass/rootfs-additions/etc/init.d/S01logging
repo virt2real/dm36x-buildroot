@@ -3,6 +3,8 @@
 # Start logging
 #
 
+/etc/virt2real/setlight.sh green on
+
 case "$1" in
   start)
 	echo -n "Starting logging: "
@@ -22,5 +24,7 @@ case "$1" in
 	echo $"Usage: $0 {start|stop|restart}"
 	exit 1
 esac
+
+/etc/virt2real/setlight.sh green off
 
 exit $?

@@ -1,35 +1,28 @@
 #!/bin/sh
 
-mount -t debugfs none /sys/kernel/debug
-
-echo 73 > /sys/class/gpio/export
-echo 74 > /sys/class/gpio/export
-echo "out" > /sys/class/gpio/gpio73/direction
-echo "out" > /sys/class/gpio/gpio74/direction
-
-
-case "$1" in
-blue)
-	echo "Set light blue"
-	echo 0 > /sys/class/gpio/gpio73/value
-	echo 0 > /sys/class/gpio/gpio74/value
+VALUE=0
+case "$2" in
+on)
+	VALUE=1
 	;;
-white)
-	echo "Set light white"
-	echo 1 > /sys/class/gpio/gpio73/value
-	echo 1 > /sys/class/gpio/gpio74/value
-	;;
-lightblue)
-	echo "Set light lightblue"
-	echo 1 > /sys/class/gpio/gpio73/value
-	echo 0 > /sys/class/gpio/gpio74/value
-	;;
-magenta)
-	echo "Set light magenta"
-	echo 0 > /sys/class/gpio/gpio73/value
-	echo 1 > /sys/class/gpio/gpio74/value
+off)
+	VALUE=0
 	;;
 esac
 
-echo 73 > /sys/class/gpio/unexport
-echo 74 > /sys/class/gpio/unexport
+case "$1" in
+green)
+	echo 73 > /sys/class/gpio/export
+	echo "out" > /sys/class/gpio/gpio73/direction
+	echo "Set green $VALUE"
+	echo $VALUE > /sys/class/gpio/gpio73/value
+	echo 73 > /sys/class/gpio/unexport
+	;;
+red)
+	echo 74 > /sys/class/gpio/export
+	echo "out" > /sys/class/gpio/gpio74/direction
+	echo "Set red $VALUE"
+	echo $VALUE > /sys/class/gpio/gpio74/value
+	echo 74 > /sys/class/gpio/unexport
+	;;
+esac

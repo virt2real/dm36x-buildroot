@@ -1,5 +1,7 @@
 #!/bin/sh -e
 
+/etc/virt2real/setlight.sh green on
+
 case "$1" in
 start)
 	echo "Loading coprocessors modules..."
@@ -85,3 +87,4 @@ stop)
 	;;
 esac
 
+/etc/virt2real/setlight.sh green off
