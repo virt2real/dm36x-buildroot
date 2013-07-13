@@ -419,6 +419,8 @@ source "package/pixman/Config.in"
 source "package/tiff/Config.in"
 source "package/webkit/Config.in"
 source "package/zxing/Config.in"
+source "package/libgphoto2/Config.in"
+source "package/gphotofs/Config.in
 endmenu
 
 menu "Hardware handling"
